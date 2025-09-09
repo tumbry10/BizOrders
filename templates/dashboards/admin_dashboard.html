@@ -1,0 +1,96 @@
+{% extends 'partials/base.html' %}
+
+{% block title %}Admin Dashboard - User Management System{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>System Administrator Dashboard</h1>
+</div>
+
+<div class="row">
+    <!-- Statistics Cards -->
+    <div class="col-md-4 mb-4">
+        <div class="card text-white bg-primary">
+            <div class="card-body">
+                <h5 class="card-title">Total Sales Representatives</h5>
+                <h2 class="card-text">{{ total_sales_reps }}</h2>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-4">
+        <div class="card text-white bg-success">
+            <div class="card-body">
+                <h5 class="card-title">Total Customers</h5>
+                <h2 class="card-text">{{ total_customers }}</h2>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-4">
+        <div class="card text-white bg-info">
+            <div class="card-body">
+                <h5 class="card-title">Quick Actions</h5>
+                <a href="{% url 'sales_rep_register' %}" class="btn btn-light btn-sm">+ Add Sales Rep</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="btn-group" role="group">
+                    <a href="{% url 'sales_rep_register' %}" class="btn btn-primary">Register Sales Rep</a>
+                    <a href="{% url 'sales_rep_list' %}" class="btn btn-outline-primary">View All Sales Reps</a>
+                    <a href="/admin/" class="btn btn-outline-secondary" target="_blank">Django Admin</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Customers -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Recent Customers</h5>
+            </div>
+            <div class="card-body">
+                {% if recent_customers %}
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Email</th>
+                                    <th>Username</th>
+                                    <th>Name</th>
+                                    <th>Date Joined</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for customer in recent_customers %}
+                                <tr>
+                                    <td>{{ customer.email }}</td>
+                                    <td>{{ customer.username }}</td>
+                                    <td>{{ customer.first_name }} {{ customer.last_name }}</td>
+                                    <td>{{ customer.created_at|date:"M d, Y" }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-muted">No customers registered yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
