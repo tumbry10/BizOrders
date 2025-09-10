@@ -2,6 +2,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+    #CUSTOMER FLOW URLS 
     path('cart/', views.cart_detail, name='cart_detail'),
     path('cart/add/<int:product_id>/', views.cart_add, name='cart_add'),
     path('cart/remove/<int:product_id>/', views.cart_remove, name='cart_remove'),
@@ -9,4 +10,7 @@ urlpatterns = [
     path("order_confirmation/<int:order_id>/", views.order_confirmation, name="order_confirmation"),
     path("my-orders/", views.my_orders, name="my_orders"),
     path("my-orders/details/<int:order_id>/", views.order_detail, name="order_detail"),
+
+    #SALES - REP FLOW URLS
+    path("sales-order/<int:order_id>/", views.sales_order_detail, name="sales_order_detail"),
 ]

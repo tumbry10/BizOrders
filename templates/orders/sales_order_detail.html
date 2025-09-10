@@ -1,0 +1,45 @@
+{% extends "partials/base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Order #{{ order.id }} Details</h2>
+    <p>Customer: {{ order.customer.username }}</p>
+    <p>Current Status: <strong>{{ order.status }}</strong></p>
+    <p>Total Amount: ${{ order.total_amount }}</p>
+
+    <table class="table table-bordered mt-3">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in order.items.all %}
+            <tr>
+                <td>{{ item.product.name }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>${{ item.price }}</td>
+                <td>${{ item.total_price }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="status" class="form-label">Update Status</label>
+            <select name="status" id="status" class="form-select">
+                <option value="PENDING" {% if order.status == "PENDING" %}selected{% endif %}>PENDING</option>
+                <option value="PROCESSING" {% if order.status == "PROCESSING" %}selected{% endif %}>PROCESSING</option>
+                <option value="READY" {% if order.status == "READY" %}selected{% endif %}>READY</option>
+                <option value="CANCELLED" {% if order.status == "CANCELLED" %}selected{% endif %}>CANCELLED</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-success">Update Status</button>
+        <a href="{% url 'sales_dashboard' %}" class="btn btn-secondary">Back to Dashboard</a>
+    </form>
+</div>
+{% endblock %}

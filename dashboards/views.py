@@ -4,8 +4,18 @@ from django.contrib import messages
 from accounts.models import CustomUser
 from products.models import Product
 from orders.cart import Cart
+from orders.models import Order
 
 # Create your views here.
+def sales_rep_required(view_func):
+    """Decorator to allow only sales reps"""
+    def wrapper(request, *args, **kwargs):
+        if request.user.user_role != 2: #sales_rep role
+            return redirect("dashboard")  # or a 403 page
+        return view_func(request, *args, **kwargs)
+    return wrapper
+
+
 @login_required
 def dashboard(request):
     if request.user.user_role == 1:  # SystAdmin
@@ -17,6 +27,7 @@ def dashboard(request):
 
 
 @login_required
+@sales_rep_required
 def admin_dashboard(request):
     if request.user.user_role != 1:
         messages.error(request, 'Access denied.')
@@ -42,8 +53,11 @@ def sales_dashboard(request):
         messages.error(request, 'Access denied.')
         return HttpResponseForbidden('Access denied.')
     
+    # Show all unprocessed orders
+    orders = Order.objects.exclude(status='READY').order_by('-created_at')
     context = {
         'user': request.user,
+        'orders': orders,
     }
     
     return render(request, 'dashboards/sales_dashboard.html', context)

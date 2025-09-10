@@ -5,6 +5,15 @@ from .models import Order, OrderItem
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+def sales_required(view_func):
+    """Decorator to allow only sales reps"""
+    def wrapper(request, *args, **kwargs):
+        if request.user.user_role != 2:
+            return redirect("customer_dashboard")  # or a 403 page
+        return view_func(request, *args, **kwargs)
+    return wrapper
+
+
 def cart_detail(request):
     cart = Cart(request)
     context = {'cart': cart}
@@ -75,3 +84,19 @@ def order_detail(request, order_id):
     order = Order.objects.get(id=order_id, customer=request.user)
     context = {"order": order}
     return render(request, "orders/order_detail.html", context)
+
+
+@login_required
+@sales_required
+def sales_order_detail(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+
+    if request.method == "POST":
+        new_status = request.POST.get("status")
+        if new_status in ["PENDING", "PROCESSING", "READY", "CANCELLED"]:
+            order.status = new_status
+            order.sales_rep = request.user
+            order.save()
+        return redirect("sales_order_detail", order_id=order.id)
+
+    return render(request, "orders/sales_order_detail.html", {"order": order})
