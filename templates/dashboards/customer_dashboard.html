@@ -5,11 +5,38 @@
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1>Order Management</h1>
-    <a href="" class="btn btn-primary">+ Make An Order</a>
+    <a href="{% url 'my_orders' %}" class="btn btn-primary">My Orders</a>
 </div>
 
 <div class="card">
     <div class="card-body">
+        <h2 class="mb-4">Available Products</h2>
+
+        <div class="row">
+            {% for product in products %}
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm h-100">
+                    {% if product.image %}
+                    <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ product.name }}</h5>
+                        <p class="card-text">{{ product.description|truncatewords:15 }}</p>
+                        <p class="card-text"><strong>${{ product.price }}</strong></p>
+                    </div>
+                    <div class="card-footer bg-white border-top-0">
+                        <a href="{% url 'cart_add' product.id %}" class="btn btn-primary w-100">
+                            Add to Cart
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="mt-4">
+            <a href="{% url 'cart_detail' %}" class="btn btn-success">View Cart</a>
+        </div>
         
     </div>
 </div>

@@ -1,0 +1,12 @@
+{% extends "partials/base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Order Confirmation</h2>
+    <p>Thank you, {{ request.user.username }}! 🎉</p>
+    <p>Your order <strong>#{{ order.id }}</strong> has been placed successfully.</p>
+    <p>Status: <span class="badge bg-info">{{ order.status }}</span></p>
+    <p>Total Amount: <strong>${{ order.total_amount }}</strong></p>
+
+    <a href="{% url 'customer_dashboard' %}" class="btn btn-primary">Continue Shopping</a>
+</div>
+{% endblock %}

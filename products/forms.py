@@ -30,11 +30,11 @@ class ProductForm(forms.ModelForm):
         'class': 'form-control',
         'placeholder': 'Enter Product Description' 
     }))
-    selling_price = forms.DecimalField(max_digits=10, decimal_places=2, min_value=0.0,
+    price = forms.DecimalField(max_digits=10, decimal_places=2, min_value=0.0,
         widget=forms.NumberInput(attrs={
         'class': 'form-control',
         'placeholder': 'Enter Product Selling Price' 
     }))
     class Meta:
         model = Product
-        fields = ['name', 'category', 'description', 'selling_price']
+        fields = ['name', 'category', 'description', 'price']

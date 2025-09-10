@@ -1,0 +1,33 @@
+{% extends "partials/base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Order #{{ order.id }} Details</h2>
+
+    <p>Status: <strong>{{ order.status }}</strong></p>
+    <p>Placed on: {{ order.created_at|date:"Y-m-d H:i" }}</p>
+
+    <table class="table table-bordered mt-3">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in order.items.all %}
+            <tr>
+                <td>{{ item.product.name }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>${{ item.price }}</td>
+                <td>${{ item.total_price }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h4>Total Amount: ${{ order.total_amount }}</h4>
+    <a href="{% url 'my_orders' %}" class="btn btn-secondary">Back to My Orders</a>
+</div>
+{% endblock %}

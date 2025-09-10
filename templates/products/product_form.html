@@ -66,11 +66,11 @@
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="{{ form.selling_price.id_for_label }}" class="form-label">Product Selling Price:</label>
-                                {{ form.selling_price }}
-                                {% if form.selling_price.errors %}
+                                <label for="{{ form.price.id_for_label }}" class="form-label">Product Selling Price:</label>
+                                {{ form.price }}
+                                {% if form.price.errors %}
                                     <div class="text-danger">
-                                        {% for error in form.selling_price.errors %}
+                                        {% for error in form.price.errors %}
                                             <small>{{ error }}</small>
                                         {% endfor %}
                                     </div>

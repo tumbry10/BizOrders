@@ -1,7 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from accounts.models import CustomUser
+from products.models import Product
+from orders.cart import Cart
 
 # Create your views here.
 @login_required
@@ -53,8 +55,10 @@ def customer_dashboard(request):
         messages.error(request, 'Access denied.')
         return HttpResponseForbidden('Access denied.')
     
+    products = Product.objects.filter(is_active=True)
     context = {
         'user': request.user,
+        'products': products,
     }
     
     return render(request, 'dashboards/customer_dashboard.html', context)
